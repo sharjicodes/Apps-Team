@@ -1,0 +1,37 @@
+Personal Finance Tracker
+ 
+A simple app to track income & expenses
+ 
+Features:
+ 
+Add/Edit/Delete Transactions
+ 
+Use objects & arrays (map, filter, find)
+ 
+Practice immutability with spread operator
+ 
+Categorize Transactions (Food, Rent, etc.)
+ 
+Use enums/objects to store categories
+ 
+Object shorthand, destructuring
+ 
+Calculate Balance & Summaries
+ 
+Use reduce to calculate totals
+ 
+Handle edge cases with optional chaining & nullish coalescing
+ 
+Save Data in LocalStorage
+ 
+Learn JSON.stringify / JSON.parse
+ 
+Understand persistence
+ 
+Filter by Date Range
+ 
+Practice array methods, conditionals
+ 
+Export Data as JSON
+ 
+Handling objects, modularizing logic
