@@ -1,6 +1,5 @@
-
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-
+let savedTotals = JSON.parse(localStorage.getItem("totals")) || { income: 0, expense: 0, balance: 0 };
 
 const form = document.getElementById("form");
 const desc = document.getElementById("desc");
@@ -16,12 +15,13 @@ const end = document.getElementById("end");
 const filterBtn = document.getElementById("filter");
 const exportBtn = document.getElementById("export");
 
-
+//local storage saving function
 function save() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem("totals", JSON.stringify(savedTotals));
 }
 
-
+// render transaction list function 
 function render(transactionsToRender = transactions) {
   list.innerHTML = "";
 
@@ -29,35 +29,29 @@ function render(transactionsToRender = transactions) {
     const li = document.createElement("li");
     li.textContent = `${t.date} | ${t.desc} | ${t.category} | ${t.amount}`;
 
-    
     const delBtn = document.createElement("button");
     delBtn.textContent = "Delete";
     delBtn.onclick = () => {
-      transactions.splice(index, 1);
+      transactions.splice(index, 1); 
       save();
       render();
+      
     };
 
     li.appendChild(delBtn);
     list.appendChild(li);
   });
-
-  
-  const income = transactionsToRender
-    .filter(t => t.amount > 0)
-    .reduce((acc, t) => acc + t.amount, 0);
-
-  const expense = transactionsToRender
-    .filter(t => t.amount < 0)
-    .reduce((acc, t) => acc + t.amount, 0);
-
-  incomeEl.textContent = income;
-  expenseEl.textContent = Math.abs(expense);
-  balanceEl.textContent = income + expense;
 }
 
+// update UI totals from savedTotals
+function renderTotals() {
+  incomeEl.textContent = savedTotals.income;
+  expenseEl.textContent = savedTotals.expense;
+  balanceEl.textContent = savedTotals.balance;
+}
 
-form.onsubmit = function(e) {
+// handle form submit
+form.onsubmit = function (e) {
   e.preventDefault();
 
   const newTransaction = {
@@ -67,40 +61,46 @@ form.onsubmit = function(e) {
     date: date.value
   };
 
-  transactions = [...transactions, newTransaction]; 
+  transactions = [...transactions, newTransaction];
+
+  //  update savedTotals  when adding
+  if (newTransaction.amount > 0) {
+    savedTotals.income += newTransaction.amount;
+  } else {
+    savedTotals.expense += Math.abs(newTransaction.amount);
+  }
+  savedTotals.balance = savedTotals.income - savedTotals.expense;
+
   save();
   render();
+  renderTotals();
   form.reset();
 };
 
+// handle filter transaction on perspective date 
+filterBtn.onclick = function (e) {
+  e.preventDefault();
 
-filterBtn.onclick = function() {
   const s = start.value;
-  const e = end.value;
+  const eDate = end.value;
 
-  if(!s|!e){
-    alert("select date")
-    
+  if (!s || !eDate) {
+    alert("Select both start and end dates");
+    return;
   }
 
-  const filtered = transactions.filter(t => {
-    return (!s | t.date >= s) && (!e | t.date <= e);
-    start.value = "";
-    end.value = "";
-  });
+  const filtered = transactions.filter(
+    t => (!s || t.date >= s) && (!eDate || t.date <= eDate)
+  );
 
   render(filtered);
 
-//   if(!render(filtered)){
-//     alert("No transactions found on selected dates")
-    
-//   }
-  start.value = " ";
-  end.value = " ";
+  start.value = "";
+  end.value = "";
 };
 
-
-exportBtn.onclick = function() {
+// handle export JSON
+exportBtn.onclick = function () {
   const dataStr = JSON.stringify(transactions, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -111,5 +111,6 @@ exportBtn.onclick = function() {
   a.click();
 };
 
-
+// initial load for rendering list and totals
 render();
+renderTotals();

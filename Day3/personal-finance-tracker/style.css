@@ -1,4 +1,4 @@
-/* GENERAL PAGE */
+
 body { 
   font-family: 'Arial', sans-serif;
   padding: 40px; 
@@ -11,7 +11,7 @@ body {
   margin: 0;
 }
 
-/* TITLE */
+
 h1 {
   font-family: Calibri, sans-serif;
   text-align: center;
@@ -22,7 +22,7 @@ h1 {
   text-transform: uppercase;
 }
 
-/* DIVIDER */
+
 .dotted-divider {
   border: none;
   border-top: 2px dotted #333;
@@ -32,15 +32,15 @@ h1 {
   margin-right: auto;
 }
 
-/* FLEX LAYOUT */
+
 .container {
   display: flex;
   gap: 30px;
   align-items: flex-start;
-  flex-wrap: wrap; /* for responsiveness */
+  flex-wrap: wrap; 
 }
 
-/* LEFT CONTENT BOX */
+
 .content {
   width: 100%;
   max-width: 440px;
@@ -52,7 +52,7 @@ h1 {
   box-sizing: border-box;
 }
 
-/* FORMS */
+
 form {
   display: flex;
   flex-direction: column;   
@@ -74,11 +74,11 @@ form label {
   display: block;
 }
 
-/* ROWS (HORIZONTAL ALIGNMENT) */
+
 .row {
   display: flex;          
   gap: 10px;              
-  flex-wrap: wrap; /* makes it stack on smaller screens */
+  flex-wrap: wrap;
 }
 
 .row .field {
@@ -86,7 +86,6 @@ form label {
   min-width: 120px;
 }
 
-/* TEXTAREA STYLE */
 #desc {
   width: 100%;         
   height: 100px;         
@@ -95,7 +94,7 @@ form label {
   box-sizing: border-box;
 }
 
-/* TOTALS */
+
 .totals {
   display: flex;              
   justify-content: center;    
@@ -115,7 +114,7 @@ form label {
   border-right: none;  
 }
 
-/* TRANSACTION LIST */
+
 .scrollable-section {
   flex: 1;
   max-width: 400px;
@@ -135,7 +134,7 @@ form label {
   font-size: 20px;
 }
 
-/* LIST ITEMS */
+
 ul { 
   list-style: square; 
   padding: 0; 
@@ -150,7 +149,7 @@ li {
   margin-bottom: 8px;
 }
 
-/* BUTTONS */
+
 button { 
   cursor: pointer;
   border-radius: 15px;
@@ -206,4 +205,5 @@ button {
     font-size: 12px;
     height: 40px;
   }
+
 }
