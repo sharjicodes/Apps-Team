@@ -16,6 +16,7 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [trailerKey, setTrailerKey] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [movieWatch, setMovieWatch] = useState("");
 
   const fetchMovieDetails = async () => {
     setIsLoading(true);
@@ -26,12 +27,18 @@ const MovieDetails = () => {
       const videoResponse = await fetch(`${API_BASE_URL}/movie/${id}/videos`, API_OPTIONS);
       const videoData = await videoResponse.json();
 
+      const videoWatch = await fetch(`${API_BASE_URL}/movie/${id}/watch/providers`, API_OPTIONS);
+      const videoWatchData = await videoWatch.json();
+
+
+
       const trailer = videoData.results.find(
         (v) => v.type === "Trailer" && v.site === "YouTube"
       );
 
       setMovie(movieData);
       setTrailerKey(trailer ? trailer.key : "");
+      setMovieWatch(videoWatchData);
     } catch (error) {
       console.error("Error fetching movie:", error);
     } finally {
@@ -85,6 +92,23 @@ const MovieDetails = () => {
         
 
           <div className="flex justify-between text-gray-400 text-sm mb-3">
+           <button
+  onClick={() => {
+    const region = "IN"; // or detect user’s country dynamically
+    const link = movieWatch?.results?.[region]?.link;
+
+    if (link) {
+      window.open(link, "_blank");
+    } else {
+      alert("Watch link not available for this region.");
+    }
+  }}
+  type="button"
+  className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center"
+>
+  🎬 Play Movie
+</button>
+
             <p>
               {movie.release_date ? movie.release_date.split("-")[0] : "N/A"} •{" "}
               {movie.runtime} min
