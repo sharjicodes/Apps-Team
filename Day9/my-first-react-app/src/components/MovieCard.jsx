@@ -1,17 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const MovieCard = ({
-  movie: {
+const MovieCard = ({ movie }) => {
+  const navigate = useNavigate();
+
+  const {
+    id,
     title,
     vote_average,
     poster_path,
     release_date,
     original_language,
     overview,
-  },
-}) => {
+  } = movie;
+
   return (
-    <div className="movie-card">
+    <div
+      className="movie-card cursor-pointer"
+      onClick={() => navigate(`/movie/${id}`)}
+    >
       <img
         src={
           poster_path
@@ -39,7 +46,7 @@ const MovieCard = ({
 
           <span>•</span>
           <h3>Overview:</h3>
-          <p className="year">{overview ? overview : "N/A"}</p>
+          <p className="year">{overview || "N/A"}</p>
         </div>
       </div>
     </div>
