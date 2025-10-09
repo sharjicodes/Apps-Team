@@ -91,8 +91,8 @@ const MovieDetails = () => {
 
         
 
-          <div className="flex justify-between text-gray-400 text-sm mb-3">
-           <button
+          <div className="flex flex-wrap  gap-3 w-full sm:w-auto">
+<button
   onClick={() => {
     const region = "IN"; // or detect user’s country dynamically
     const link = movieWatch?.results?.[region]?.link;
@@ -108,13 +108,13 @@ const MovieDetails = () => {
 >
   🎬 Play Movie
 </button>
-
+</div>
             <p>
               {movie.release_date ? movie.release_date.split("-")[0] : "N/A"} •{" "}
               {movie.runtime} min
             </p>
             
-          </div>
+          
 
          <p>⭐ {movie.vote_average?.toFixed(1)} ({movie.vote_count} votes)</p>
 
