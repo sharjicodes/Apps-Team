@@ -68,42 +68,61 @@ const Home = () => {
           </h1>
 
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          <div className="flex justify-center gap-3 mt-4">
-            <button
-              onClick={() => setSortType("popularity.desc")}
-              type="button"
-              class="text-white bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Popularity
-            </button>
-            <button
-              onClick={() => setSortType("vote_average.desc")}
-              type="button"
-              class="text-white bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Rating
-            </button>
-            <button
-              onClick={() => setSortType("release_date.desc")}
-              type="button"
-              class="text-white bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
-            >
-              Release Date
-            </button>
-           
-              <select
-                value={movieLanguage}
-                onChange={(e) => setMovieLanguage(e.target.value)}
-                className="text-white bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2"
-              >
-                <option value="en">English</option>
-                <option value="ml">Malayalam</option>
-                <option value="hi">Hindi</option>
-                <option value="ja">Japanese</option>
-                <option value="ko">Korean</option>
-              </select>
-            
-          </div>
+         <div className="flex flex-wrap justify-center items-center gap-3 mt-4 px-2 w-full">
+  {/* Sort Buttons */}
+  <div className="flex flex-wrap justify-center gap-3 w-full sm:w-auto">
+    <button
+      onClick={() => setSortType("popularity.desc")}
+      type="button"
+      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center"
+    >
+      Popularity
+    </button>
+
+    <button
+      onClick={() => setSortType("vote_average.desc")}
+      type="button"
+      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center"
+    >
+      Rating
+    </button>
+
+    <button
+      onClick={() => setSortType("release_date.desc")}
+      type="button"
+      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[120px] text-center"
+    >
+      Release Date
+    </button>
+  </div>
+
+  {/* Language Dropdown */}
+  <div className="w-full sm:w-auto flex justify-center">
+    <select
+      value={movieLanguage}
+      onChange={(e) => setMovieLanguage(e.target.value)}
+      className="w-[160px] text-sm font-medium rounded-full px-4 py-2 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 cursor-pointer transition-all"
+    >
+      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="en">
+        English
+      </option>
+      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ml">
+        Malayalam
+      </option>
+      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="hi">
+        Hindi
+      </option>
+      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ja">
+        Japanese
+      </option>
+      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ko">
+        Korean
+      </option>
+    </select>
+  </div>
+</div>
+
+
         </header>
 
         <section className="all-movies">
