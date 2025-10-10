@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Search from "./Search"
-import MovieCard from "./MovieCard"
-import Spinner from "./Spinner"
+import Search from "./Search";
+import MovieCard from "./MovieCard";
+import Spinner from "./Spinner";
 import { useDebounce } from "react-use";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
@@ -13,15 +13,15 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`,
   },
 };
-//API-Application Programming Interface
+
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [sortType , setSortType ] =useState('popularity.desc');
-  const [movieLanguage , setMovieLanguage] = useState('en');
+  const [sortType, setSortType] = useState("popularity.desc");
+  const [movieLanguage, setMovieLanguage] = useState("en");
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
@@ -47,7 +47,7 @@ const Home = () => {
       setMovieList(data.results || []);
     } catch (error) {
       console.log(`error fetching movies: ${error}`);
-      setErrorMessage("Error fetching movies.please try again later.");
+      setErrorMessage("Error fetching movies. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +55,8 @@ const Home = () => {
 
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
-  }, [debouncedSearchTerm , sortType ,movieLanguage]);
+  }, [debouncedSearchTerm, sortType, movieLanguage]);
+
   return (
     <main>
       <div className="pattern" />
@@ -68,63 +69,75 @@ const Home = () => {
           </h1>
 
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-         <div className="flex flex-wrap justify-center items-center gap-3 mt-4 px-2 w-full">
-  {/* Sort Buttons */}
-  <div className="flex flex-wrap justify-center gap-3 w-full sm:w-auto">
-    <button
-      onClick={() => setSortType("popularity.desc")}
-      type="button"
-      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center"
-    >
-      Popularity
-    </button>
 
-    <button
-      onClick={() => setSortType("vote_average.desc")}
-      type="button"
-      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center"
-    >
-      Rating
-    </button>
+          {/* Buttons + Language Filter */}
+          <div className="flex flex-wrap justify-center items-center gap-3 mt-4 px-2 w-full">
+            {/* Sort Buttons */}
+            <div className="flex flex-wrap justify-center gap-3 w-full sm:w-auto">
+              {[
+                { label: "Popularity", value: "popularity.desc" },
+                { label: "Rating", value: "vote_average.desc" },
+                { label: "Release Date", value: "release_date.desc" },
+              ].map(({ label, value }) => (
+                <button
+                  key={value}
+                  onClick={() => setSortType(value)}
+                  type="button"
+                  className={`flex-1 sm:flex-none text-white font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[110px] text-center
+                    ${
+                      sortType === value
+                        ? "border-2 border-white shadow-lg scale-105 bg-gradient-to-r from-blue-700 to-blue-800"
+                        : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                    }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
 
-    <button
-      onClick={() => setSortType("release_date.desc")}
-      type="button"
-      className="flex-1 sm:flex-none text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-full text-sm px-4 py-2 transition-all min-w-[120px] text-center"
-    >
-      Release Date
-    </button>
-  </div>
-
-  {/* Language Dropdown */}
-  <div className="w-full sm:w-auto flex justify-center">
-    <select
-      value={movieLanguage}
-      onChange={(e) => setMovieLanguage(e.target.value)}
-      className="w-[160px] text-sm font-medium rounded-full px-4 py-2 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 cursor-pointer transition-all"
-    >
-      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="en">
-        English
-      </option>
-      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ml">
-        Malayalam
-      </option>
-      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="hi">
-        Hindi
-      </option>
-      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ja">
-        Japanese
-      </option>
-      <option className="bg-white text-black dark:bg-gray-800 dark:text-white" value="ko">
-        Korean
-      </option>
-    </select>
-  </div>
-</div>
-
-
+            {/* Language Dropdown */}
+            <div className="w-full sm:w-auto flex justify-center">
+              <select
+                value={movieLanguage}
+                onChange={(e) => setMovieLanguage(e.target.value)}
+                className="w-[160px] text-sm font-medium rounded-full px-4 py-2 text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 cursor-pointer transition-all"
+              >
+                <option
+                  className="bg-white text-black dark:bg-gray-800 dark:text-white"
+                  value="en"
+                >
+                  English
+                </option>
+                <option
+                  className="bg-white text-black dark:bg-gray-800 dark:text-white"
+                  value="ml"
+                >
+                  Malayalam
+                </option>
+                <option
+                  className="bg-white text-black dark:bg-gray-800 dark:text-white"
+                  value="hi"
+                >
+                  Hindi
+                </option>
+                <option
+                  className="bg-white text-black dark:bg-gray-800 dark:text-white"
+                  value="ja"
+                >
+                  Japanese
+                </option>
+                <option
+                  className="bg-white text-black dark:bg-gray-800 dark:text-white"
+                  value="ko"
+                >
+                  Korean
+                </option>
+              </select>
+            </div>
+          </div>
         </header>
 
+        {/* Movie Section */}
         <section className="all-movies">
           <h2 className="mt-[20px]">All Movies</h2>
 
