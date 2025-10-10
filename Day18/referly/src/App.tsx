@@ -1,8 +1,19 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+
 function App() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-950 text-white">
-      <h1 className="text-4xl font-bold text-purple-400">Referly</h1>
-      <p className="mt-4 text-gray-300">Job Referral & Application Manager</p>
+    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <Routes>
+        <Route path="/" element={!user ? <Navigate to="/login" /> : <Dashboard />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </div>
   );
 }
