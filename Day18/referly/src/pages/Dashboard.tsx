@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import EmployeeDashboard from "../components/EmployeeDashboard";
+import RecruiterDashboard from "../components/RecruiterDashboard";
+import AdminDashboard from "../components/AdminDashboard";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -9,23 +12,28 @@ export default function Dashboard() {
     return null;
   }
 
+  const renderDashboard = () => {
+    switch (user.role) {
+      case "Employee":
+        return <EmployeeDashboard />;
+      case "Recruiter":
+        return <RecruiterDashboard />;
+      case "Admin":
+        return <AdminDashboard />;
+      default:
+        return <div>Invalid Role</div>;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-white">
-      <h1 className="text-3xl font-bold mb-4">Welcome, {user.role}!</h1>
+      <div className="flex justify-between w-full max-w-2xl mb-6">
+        <h1 className="text-3xl font-bold">Welcome, {user.role}</h1>
+        
+      </div>
 
-      <p className="text-gray-400 mb-6">
-        You are logged in as <span className="text-purple-400">{user.email}</span>
-      </p>
-
-      <button
-        onClick={() => {
-          localStorage.removeItem("user");
-          navigate("/login");
-        }}
-        className="bg-red-500 hover:bg-red-600 py-2 px-4 rounded"
-      >
-        Logout
-      </button>
+      {renderDashboard()}
     </div>
   );
 }
+
