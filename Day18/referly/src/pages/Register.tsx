@@ -1,40 +1,43 @@
-
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../context/AuthContext"; 
 
-// 🧩 Validation Schema
+
+
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(["Employee", "Recruiter", "Admin"], {
+  role: z.enum(["Employee", "Recruiter"], {
     required_error: "Please select a role",
   }),
 });
 
+type RegisterFormData = z.infer<typeof registerSchema>;
+
 const Register = () => {
   const navigate = useNavigate();
+  const { register: registerUser } = useAuth(); //get register fn from context
 
-  // 🎣 React Hook Form setup with Zod
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  // 💾 Keep existing functionality
-  const onSubmit = (data) => {
-    localStorage.setItem("user", JSON.stringify(data));
-    alert(`Registered as ${data.role}`);
-    navigate("/login");
-  };
+  const onSubmit = (data: RegisterFormData) => {
+  registerUser(data);
+  alert("Registration successful! Please log in.");
+  navigate("/login");
+};
+
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-gray-800 p-8 rounded-lg w-full max-w-sm shadow-lg"
@@ -87,12 +90,11 @@ const Register = () => {
             </option>
             <option value="Employee">Employee</option>
             <option value="Recruiter">Recruiter</option>
-            <option value="Admin">Admin</option>
+            
           </select>
           {errors.role && <p className="text-red-500 text-sm">{errors.role.message}</p>}
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold"
@@ -110,5 +112,4 @@ const Register = () => {
     </div>
   );
 };
-
 export default Register;

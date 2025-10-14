@@ -1,8 +1,9 @@
-
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../context/AuthContext";
+
+
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -10,30 +11,34 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
-
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(loginSchema),
-  });
+  } = useForm({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit = (data) => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("Logged in as:", storedUser.role);
+  const onSubmit = (data: any) => {
+  const storedUser = JSON.parse(localStorage.getItem("user") || "null");
+  const adminUser = JSON.parse(localStorage.getItem("adminUser") || "null");
+  
+  
+  
 
-    if (storedUser && storedUser.email === data.email && storedUser.password === data.password) {
-      localStorage.setItem("loggedInUser", JSON.stringify(storedUser));
-      navigate("/dashboard");
-    } else {
-      alert("Invalid email or password!");
-    }
-  };
+  if (adminUser && data.email === adminUser.email && data.password === adminUser.password) {
+  login(adminUser);
+} else if (storedUser && data.email === storedUser.email && data.password === storedUser.password) {
+  login(storedUser);
+} else {
+  alert("Invalid email or password!");
+}
+
+}
+
+
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-gray-800 p-8 rounded-lg w-full max-w-sm shadow-lg"
@@ -76,6 +81,6 @@ const Login = () => {
       </form>
     </div>
   );
-};
+  };
 
 export default Login;

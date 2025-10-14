@@ -1,18 +1,21 @@
-import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
+
 import EmployeeDashboard from "../components/EmployeeDashboard";
 import RecruiterDashboard from "../components/RecruiterDashboard";
 import AdminDashboard from "../components/AdminDashboard";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  
+  const { user } = useAuth();
 
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
+  
+  
 
+  // 🧠 Choose dashboard based on role
   const renderDashboard = () => {
+    if (!user) return null;
+
     switch (user.role) {
       case "Employee":
         return <EmployeeDashboard />;
@@ -25,15 +28,16 @@ export default function Dashboard() {
     }
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-950 text-white">
-      <div className="flex justify-between w-full max-w-2xl mb-6">
-        <h1 className="text-3xl font-bold">Welcome, {user.role}</h1>
-        
-      </div>
+  if (!user) return null; // prevents rendering before redirect
 
-      {renderDashboard()}
-    </div>
+  return (
+    
+        
+<div className="min-h-screen bg-cyan-500 text-white flex items-center justify-center">
+       
+      
+{renderDashboard()}
+<h1 className="text-9xl font-bold">Hi Welcome<br></br> {user.role}👋</h1>
+</div>
   );
 }
-
