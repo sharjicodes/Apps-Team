@@ -2,9 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "../context/AuthContext"; 
-
-
+import { useAuth } from "../context/AuthContext";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -30,11 +28,10 @@ const Register = () => {
   });
 
   const onSubmit = (data: RegisterFormData) => {
-  registerUser(data);
-  alert("Registration successful! Please log in.");
-  navigate("/login");
-};
-
+    registerUser(data);
+    alert("Registration successful! Please log in.");
+    navigate("/login");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
@@ -52,7 +49,9 @@ const Register = () => {
             {...register("name")}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
         </div>
 
         {/* Email */}
@@ -63,7 +62,9 @@ const Register = () => {
             {...register("email")}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Password */}
@@ -74,7 +75,9 @@ const Register = () => {
             {...register("password")}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
         {/* Role */}
@@ -90,9 +93,10 @@ const Register = () => {
             </option>
             <option value="Employee">Employee</option>
             <option value="Recruiter">Recruiter</option>
-            
           </select>
-          {errors.role && <p className="text-red-500 text-sm">{errors.role.message}</p>}
+          {errors.role && (
+            <p className="text-red-500 text-sm">{errors.role.message}</p>
+          )}
         </div>
 
         <button

@@ -3,8 +3,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../context/AuthContext";
 
-
-
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -19,23 +17,31 @@ const Login = () => {
   } = useForm({ resolver: zodResolver(loginSchema) });
 
   const onSubmit = (data: any) => {
-  const storedUser = JSON.parse(localStorage.getItem("user") || "null");
-  const adminUser = JSON.parse(localStorage.getItem("adminUser") || "null");
-  
-  
-  
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]"); // ✅ plural
+    const adminUser = JSON.parse(localStorage.getItem("adminUser") || "null");
 
-  if (adminUser && data.email === adminUser.email && data.password === adminUser.password) {
-  login(adminUser);
-} else if (storedUser && data.email === storedUser.email && data.password === storedUser.password) {
-  login(storedUser);
-} else {
-  alert("Invalid email or password!");
-}
+    // Check admin first
+    if (
+      adminUser &&
+      data.email === adminUser.email &&
+      data.password === adminUser.password
+    ) {
+      login(adminUser);
+      return;
+    }
 
-}
+    // Check among registered users
+    const foundUser = storedUsers.find(
+      (user: any) =>
+        user.email === data.email && user.password === data.password
+    );
 
-
+    if (foundUser) {
+      login(foundUser);
+    } else {
+      alert("Invalid email or password!");
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
@@ -52,7 +58,9 @@ const Login = () => {
             {...register("email")}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="mb-4">
@@ -62,7 +70,9 @@ const Login = () => {
             {...register("password")}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
         <button
@@ -81,6 +91,6 @@ const Login = () => {
       </form>
     </div>
   );
-  };
+};
 
 export default Login;
