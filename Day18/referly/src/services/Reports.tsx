@@ -1,17 +1,7 @@
-
 import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-
-export default function AdminDashboard() {
-const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+const Reports = () => {
+    const {  logout } = useAuth();
   return (
 <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -44,4 +34,4 @@ const navigate = useNavigate();
 </nav>
   );
 }
-
+export default Reports

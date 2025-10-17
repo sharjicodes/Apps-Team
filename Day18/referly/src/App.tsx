@@ -9,6 +9,9 @@ import Status from "./services/Status";
 import PostReferals from "./services/PostReferals";
 import PostStatus from "./services/PostStatus";
 import JobListings from "./services/JobListings";
+import Reports from "./services/Reports";
+import Roles from "./services/Roles";
+import ReferalConversion from "./services/ReferalConversion";
 function AppRoutes() {
   const { user } = useAuth();
   const loggedInUser = JSON.parse(
@@ -55,7 +58,23 @@ function AppRoutes() {
           path="/dashboard"
           element={currentUser ? <Dashboard /> : <Navigate to="/login" />}
         />
+
+         <Route
+          path="/reports"
+          element={currentUser ? <Reports /> : <Navigate to="/login" />}
+        />
+
+        <Route
+          path="/roles"
+          element={currentUser ? <Roles /> : <Navigate to="/login" />}
+        />
+
+        <Route
+          path="/referalconversion"
+          element={currentUser ? <ReferalConversion /> : <Navigate to="/login" />}
+        />
       </Routes>
+      
     </div>
   );
 }

@@ -1,7 +1,30 @@
 import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from "react";
 
+interface refer {
+  id: string;
+  name: string;
+  place: string;
+  aboutyou: string;
+  resume: string;
+  postedAt: string;
+  
+}
 const Referals = () => {
   const { logout } = useAuth();
+    const [refers, setrefers] = useState<refer[]>([]);
+  
+    useEffect(() => {
+      // Get all jobs object from localStorage
+      const allrefers = JSON.parse(localStorage.getItem("refers") || "{}");
+  
+      // Flatten all users' jobs into a single array
+      const refersArray = Object.values(allrefers).flat() as refer[];
+;
+  
+      setrefers(refersArray);
+    }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -53,6 +76,34 @@ const Referals = () => {
           </div>
         </div>
       </nav>
+
+    <div className="mt-20 w-full max-w-3xl px-4">
+        {refers.length === 0 ? (
+          <p className="text-center text-xl mt-10">No jobs posted yet.</p>
+        ) : (
+          refers.map((refer) => (
+            <div
+              key={refer.id}
+              className="bg-gray-800 p-6 rounded-lg mb-4 shadow-md"
+            >
+              <h3 className="text-2xl font-bold">{refer.name}</h3>
+              <p className="text-gray-300">
+                <strong>Place:</strong> {refer.place}
+              </p>
+              <p className="text-gray-300">
+                <strong>About:</strong> {refer.aboutyou}
+              </p>
+             
+               <a className="text-gray-300" href={refer.resume}> <strong>Resume url:</strong> {refer.resume}</a>
+              
+              
+              <p className="text-gray-400 text-sm">
+                Posted on: {new Date(refer.postedAt).toLocaleString()}
+              </p>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

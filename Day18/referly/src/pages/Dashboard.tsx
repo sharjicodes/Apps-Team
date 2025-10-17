@@ -24,7 +24,7 @@ export default function Dashboard() {
       } else if (user.role === "Employee") {
         navigate("/joblistings");
       } else if (user.role === "Admin") {
-        navigate("/admin");
+        navigate("/reports");
       } else {
         navigate("/login");
       }

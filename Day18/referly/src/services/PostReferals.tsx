@@ -82,7 +82,7 @@ const PostReferals = () => {
     // Save back to localStorage
     localStorage.setItem("refers", JSON.stringify(allrefers));
 
-    alert("✅ Job successfully posted!");
+    alert("✅ Referal successfully posted!");
     navigate("/Dashboard");
   };
 
