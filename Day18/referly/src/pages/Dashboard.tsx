@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-import EmployeeDashboard from "../components/EmployeeDashboard";
-import RecruiterDashboard from "../components/RecruiterDashboard";
-import AdminDashboard from "../components/AdminDashboard";
-
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -46,24 +42,4 @@ export default function Dashboard() {
       </div>
     );
   }
-
-  // Once splash ends, render role-specific dashboard
-  const renderDashboard = () => {
-    switch (user.role) {
-      case "Employee":
-        return <EmployeeDashboard />;
-      case "Recruiter":
-        return <RecruiterDashboard />;
-      case "Admin":
-        return <AdminDashboard />;
-      default:
-        return <div>Invalid Role</div>;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-cyan-500 text-white flex items-center justify-center">
-      {renderDashboard()}
-    </div>
-  );
 }

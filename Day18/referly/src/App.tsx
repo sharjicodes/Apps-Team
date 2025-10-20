@@ -3,15 +3,15 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import Jobs from "./services/Jobs";
-import Referals from "./services/Referals";
-import Status from "./services/Status";
-import PostReferals from "./services/PostReferals";
-import PostStatus from "./services/PostStatus";
-import JobListings from "./services/JobListings";
-import Reports from "./services/Reports";
-import Roles from "./services/Roles";
-import ReferalConversion from "./services/ReferalConversion";
+import Jobs from "./components/recruiter/Jobs";
+import Referals from "./components/recruiter/Referals";
+import Status from "./components/employee/Status";
+import PostReferals from "./components/employee/PostReferals";
+import PostStatus from "./components/recruiter/PostStatus";
+import JobListings from "./components/employee/JobListings";
+import Reports from "./components/admin/Reports";
+import Roles from "./components/admin/Roles";
+import ReferalConversion from "./components/admin/ReferalConversion";
 function AppRoutes() {
   const { user } = useAuth();
   const loggedInUser = JSON.parse(
