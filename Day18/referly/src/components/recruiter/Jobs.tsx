@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { FaUserTie } from "react-icons/fa";
 
 const jobSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -18,13 +19,10 @@ const jobSchema = z.object({
     message: "Type required",
   }),
   location: z.string().min(1, { message: "Location is required" }),
-  salary: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z.number().optional()
-  ),
+  salary: z.number().min(0, { message: "Salary cannot be negative." }).int({ message: "Salary must be an integer." }),
 });
 
-export type JobData = z.infer<typeof jobSchema>;
+ type JobData = z.infer<typeof jobSchema>;
 
 const Jobs = () => {
   const { logout, user } = useAuth();
@@ -36,40 +34,35 @@ const Jobs = () => {
   >([]);
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<JobData>({
-    resolver: zodResolver(jobSchema),
-  });
+  const { register, handleSubmit, control, formState: { errors } } = useForm<JobData>({
+  resolver: zodResolver(jobSchema),
+});
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
   // Fetch cities dynamically from Geoapify
-  const fetchLocations = async (inputValue: string) => {
-    if (!inputValue) return;
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
-          inputValue
-        )}&limit=10&apiKey=${API_KEY}`
-      );
-      const data = await res.json();
-      const options = (data.features || []).map((item: any) => ({
-        label: item.properties.formatted,
-        value: item.properties.formatted,
-      }));
-      setLocationOptions(options);
-    } catch (err) {
-      console.error("Error fetching locations:", err);
-      setLocationOptions([]); // fallback empty
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchLocations = async (inputValue: string) => {
+  //   if (!inputValue) return;
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+  //         inputValue
+  //       )}&limit=10&apiKey=${API_KEY}`
+  //     );
+  //     const data = await res.json();
+  //     const options = (data.features || []).map((item: any) => ({
+  //       label: item.properties.formatted,
+  //       value: item.properties.formatted,
+  //     }));
+  //     setLocationOptions(options);
+  //   } catch (err) {
+  //     console.error("Error fetching locations:", err);
+  //     setLocationOptions([]); // fallback empty
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // Save job post to localStorage
   const onSubmit = (data: JobData) => {
@@ -99,8 +92,9 @@ const Jobs = () => {
       autoClose: 2000,
       theme: "colored",
     });
+    return;
 
-    setTimeout(() => navigate("/Dashboard"), 2500);
+    setTimeout(() => navigate("/jobs"), 2500);
   };
 
   // Navbar links
@@ -119,9 +113,9 @@ const Jobs = () => {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Title */}
           <div className="flex items-center space-x-2">
-            <FaUserCircle className="text-blue-400 text-3xl" />
+            <FaUserTie className="text-blue-400 text-3xl" />
           </div>
-          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide">
+          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide font-style: italic">
             Recruiter Dashboard
           </span>
 
@@ -149,7 +143,7 @@ const Jobs = () => {
                   onClick={() => setDropdownOpen(!isDropdownOpen)}
                   className="text-white hover:text-blue-400 px-3 py-2 rounded-full focus:outline-none"
                 >
-                  ⋮
+                  <FaUserCircle className="text-blue-400 text-3xl" />
                 </button>
 
                 {isDropdownOpen && (
@@ -175,7 +169,7 @@ const Jobs = () => {
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
                       <div className="flex items-center space-x-2">
-                        <FaUserCircle className="text-blue-400 text-3xl" />
+                        
                       </div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
@@ -332,7 +326,7 @@ const Jobs = () => {
         <div className="mb-4">
           <label className="block mb-1">Place</label>
           <Controller
-            name="place"
+            name="location"
             control={control}
             render={({ field }) => (
               <Select
@@ -374,7 +368,6 @@ const Jobs = () => {
             <p className="text-red-500 text-sm">{errors.location.message}</p>
           )}
         </div>
-
         {/* Salary */}
         <div className="mb-4">
           <label className="block mb-1">Salary (CTC)</label>
@@ -382,7 +375,7 @@ const Jobs = () => {
             type="number"
             step="0.01"
             placeholder="Enter the salary"
-            {...register("salary")}
+            {...register("salary", { valueAsNumber: true })}
             className="w-full p-2 rounded bg-gray-700 focus:outline-none"
           />
           {errors.salary && (

@@ -41,7 +41,7 @@ const Register = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-gray-800 p-8 rounded-2xl w-full max-w-sm shadow-lg"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">
+        <h2 className="text-4xl font-bold mb-6 text-center text-blue-400">
           Register
         </h2>
         <div className="flex justify-center mb-6">

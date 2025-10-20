@@ -12,6 +12,7 @@ import JobListings from "./components/employee/JobListings";
 import Reports from "./components/admin/Reports";
 import Roles from "./components/admin/Roles";
 import ReferalConversion from "./components/admin/ReferalConversion";
+
 function AppRoutes() {
   const { user } = useAuth();
   const loggedInUser = JSON.parse(

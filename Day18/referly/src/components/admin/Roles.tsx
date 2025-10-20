@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation } from "react-router-dom";
+
 import Select from "react-select";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 interface Job {
   id: string;
@@ -20,21 +23,21 @@ interface Job {
 
 const Roles = () => {
   const { user, logout } = useAuth();
-  const locationPath = useLocation();
+
   const [jobs, setJobs] = useState<Job[]>([]);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [newJob, setNewJob] = useState({
     title: "",
     department: "",
     summary: "",
-    type: "Full Time",
+    type: "",
     location: "",
     salary: "",
   });
   const [locationOptions, setLocationOptions] = useState<
     { label: string; value: string }[]
   >([]);
-  const [loadingLocation, setLoadingLocation] = useState(false);
+
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navItems = [
     { path: "/reports", label: "🧮 Users Management" },
@@ -45,8 +48,11 @@ const Roles = () => {
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY; // replace with your Geoapify API key
 
   useEffect(() => {
-    const allJobsObj = JSON.parse(localStorage.getItem("jobs") || "{}");
+    const allJobsObj = JSON.parse(
+      localStorage.getItem("jobs") || "{}"
+    ) as Record<string, Job[]>;
     const allJobs: Job[] = Object.values(allJobsObj).flat();
+
     setJobs(allJobs);
   }, []);
 
@@ -82,67 +88,77 @@ const Roles = () => {
 
   const handleAddJob = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const jobData = editingJob || newJob;
+
+    // ✅ validate based on whichever is active
     if (
-      !newJob.title ||
-      !newJob.department ||
-      !newJob.summary ||
-      !newJob.location ||
-      !newJob.salary
+      !jobData.title ||
+      !jobData.department ||
+      !jobData.location ||
+      !jobData.salary ||
+      !jobData.summary ||
+      !jobData.type
     ) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
       return;
     }
 
-    const job: Job = {
-      id: crypto.randomUUID(),
-      title: newJob.title,
-      department: newJob.department,
-      summary: newJob.summary,
-      type: newJob.type,
-      location: newJob.location,
-      salary: Number(newJob.salary),
-      postedAt: new Date().toISOString(),
-      recruiterName: user?.name || "Admin",
-      recruiterId: user?.id || "admin",
-    };
+    if (editingJob) {
+      // Update job
+      const updatedJobs = jobs.map((job) =>
+        job.id === editingJob.id ? editingJob : job
+      );
+      setJobs(updatedJobs);
+      localStorage.setItem("jobs", JSON.stringify(updatedJobs));
+      setEditingJob(null);
+      toast.success("Job edited succesfully");
+      return;
+    } else {
+      // Create new job
+      const newJobData: Job = {
+  ...newJob,
+  id: Date.now().toString(),
+  postedAt: new Date().toISOString(),
+  recruiterName: user?.name || "Admin",
+  recruiterId: user?.id || "admin", 
+  salary: Number(newJob.salary), 
+};
 
-    const updated = [...jobs, job];
-    saveJobsToLocalStorage(updated);
-    setNewJob({
-      title: "",
-      department: "",
-      summary: "",
-      type: "Full Time",
-      location: "",
-      salary: "",
-    });
+      const updatedJobs = [...jobs, newJobData];
+      setJobs(updatedJobs);
+      localStorage.setItem("jobs", JSON.stringify(updatedJobs));
+      setNewJob({
+        title: "",
+        department: "",
+        location: "",
+        salary: "",
+        summary: "",
+        type: "Full Time",
+      });
+    }
   };
 
   const handleEdit = (job: Job) => setEditingJob(job);
-  const handleSaveEdit = () => {
-    if (!editingJob) return;
-    const updatedJobs = jobs.map((j) =>
-      j.id === editingJob.id ? editingJob : j
-    );
-    saveJobsToLocalStorage(updatedJobs);
-    setEditingJob(null);
-  };
+ 
   const handleDelete = (id: string) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
     const updated = jobs.filter((j) => j.id !== id);
     saveJobsToLocalStorage(updated);
+    toast.success("Job deleted sucessfully!");
   };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-900 text-white w-full">
+      <ToastContainer position="top-right" autoClose={2000} />
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           {/* Left - Title */}
           <div className="flex items-center space-x-2">
-            <FaUserCircle className="text-blue-400 text-3xl" />
+            <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
-          <span className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
+          <span className="text-xl sm:text-xl font-semibold text-gray-900 dark:text-white font-style: italic">
             Admin Dashboard
           </span>
 
@@ -171,16 +187,15 @@ const Roles = () => {
                 className="text-gray-700 dark:text-white hover:text-blue-500 px-3 py-2 rounded-full focus:outline-none"
                 title="User Menu"
               >
-                ⋮
+                <div className="flex items-center space-x-2">
+                  <FaUserCircle className="text-blue-400 text-3xl" />
+                </div>
               </button>
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
                   {/* User Info */}
                   <div className="px-4 py-2 border-b border-gray-700">
-                    <div className="flex items-center space-x-2">
-                      <FaUserCircle className="text-blue-400 text-3xl" />
-                    </div>
                     <p className="font-semibold">{user?.name}</p>
                     <p className="text-sm text-gray-400">
                       {user?.role || "Employee"}
@@ -306,9 +321,27 @@ const Roles = () => {
           }
         />
 
+        {/* ✅ Job Type Selector */}
+        <select
+          className="w-full mb-3 p-2 rounded bg-gray-700 text-white focus:outline-none"
+          value={editingJob?.type || newJob.type}
+          onChange={(e) =>
+            editingJob
+              ? setEditingJob({ ...editingJob, type: e.target.value })
+              : setNewJob({ ...newJob, type: e.target.value })
+          }
+        >
+          <option value="" disabled>
+            Select Type
+          </option>
+          <option value="Full Time">Full Time</option>
+          <option value="Trainee">Part Time</option>
+          <option value="Internship">Internship</option>
+        </select>
+
         {/* Location with search */}
         <Select
-          placeholder={loadingLocation ? "Loading..." : "Search location..."}
+          placeholder={"Search location..."}
           isSearchable
           options={locationOptions}
           value={
@@ -335,6 +368,8 @@ const Roles = () => {
         <input
           type="number"
           placeholder="Salary"
+          min="0"
+          required
           className="w-full mb-3 p-2 rounded bg-gray-700 focus:outline-none"
           value={editingJob?.salary || newJob.salary}
           onChange={(e) =>
@@ -352,7 +387,7 @@ const Roles = () => {
       </form>
 
       {/* Job Listings */}
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl px-10">
         <h2 className="text-2xl font-semibold mb-4">All Posted Jobs</h2>
         {jobs.length === 0 ? (
           <p>No jobs found.</p>
@@ -367,8 +402,16 @@ const Roles = () => {
                 <strong>Recruiter:</strong> {job.recruiterName}
               </p>
               <p>
+                <strong>Title:</strong> {job.title}
+              </p>
+
+              <p>
                 <strong>Department:</strong> {job.department}
               </p>
+              <p>
+                <strong>Type:</strong> {job.type}
+              </p>
+
               <p>
                 <strong>Location:</strong> {job.location}
               </p>

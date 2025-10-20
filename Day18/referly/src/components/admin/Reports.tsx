@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 interface User {
   id: string;
@@ -14,7 +17,7 @@ interface User {
 const Reports = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
+  
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState({
     name: "",
@@ -40,12 +43,12 @@ const Reports = () => {
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUser.name || !newUser.email || !newUser.password) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
       return;
     }
     const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
     if (storedUsers.some((u: User) => u.email === newUser.email)) {
-      alert("User with this email already exists!");
+      toast.error("User with this email already exists!");
       return;
     }
     const userData = {
@@ -59,6 +62,8 @@ const Reports = () => {
     localStorage.setItem("users", JSON.stringify(updatedUsers));
     setUsers(updatedUsers);
     setNewUser({ name: "", email: "", password: "", role: "Recruiter" });
+    toast.success("New recruiter added");
+    return;
   };
 
   const handleDeleteUser = (id: string) => {
@@ -66,18 +71,21 @@ const Reports = () => {
     const updated = users.filter((u) => u.id !== id);
     localStorage.setItem("users", JSON.stringify(updated));
     setUsers(updated);
+    toast.success("User deleted sucessfully!")
+    return;
   };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-900 text-white w-full">
+       <ToastContainer position="top-right" autoClose={2000} />
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           {/* Left - Title */}
           <div className="flex items-center space-x-2">
-            <FaUserCircle className="text-blue-400 text-3xl" />
+            <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
-          <span className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
+          <span className="text-xl sm:text-xl font-semibold text-gray-900 dark:text-white font-style: italic">
             Admin Dashboard
           </span>
 
@@ -106,16 +114,16 @@ const Reports = () => {
                 className="text-gray-700 dark:text-white hover:text-blue-500 px-3 py-2 rounded-full focus:outline-none"
                 title="User Menu"
               >
-                ⋮
+                <div className="flex items-center space-x-2">
+                    <FaUserCircle className="text-blue-400 text-3xl" />
+                  </div>
               </button>
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
                   {/* User Info */}
                   <div className="px-4 py-2 border-b border-gray-700">
-                    <div className="flex items-center space-x-2">
-                      <FaUserCircle className="text-blue-400 text-3xl" />
-                    </div>
+                    
                     <p className="font-semibold">{user?.name}</p>
                     <p className="text-sm text-gray-400">
                       {user?.role || "Employee"}

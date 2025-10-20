@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 
 const referSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -56,27 +57,27 @@ const PostReferals = () => {
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
-  const fetchLocations = async (inputValue: string) => {
-    if (!inputValue) return;
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
-          inputValue
-        )}&limit=10&apiKey=${API_KEY}`
-      );
-      const data = await res.json();
-      const options = data.features.map((item: any) => ({
-        label: item.properties.formatted,
-        value: item.properties.formatted,
-      }));
-      setLocationOptions(options);
-    } catch (err) {
-      console.error("Error fetching locations:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchLocations = async (inputValue: string) => {
+  //   if (!inputValue) return;
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+  //         inputValue
+  //       )}&limit=10&apiKey=${API_KEY}`
+  //     );
+  //     const data = await res.json();
+  //     const options = data.features.map((item: any) => ({
+  //       label: item.properties.formatted,
+  //       value: item.properties.formatted,
+  //     }));
+  //     setLocationOptions(options);
+  //   } catch (err) {
+  //     console.error("Error fetching locations:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const onSubmit = (data: referData) => {
     if (!user || !user.id) {
@@ -116,7 +117,10 @@ const PostReferals = () => {
       <nav className="bg-gray-800/80 backdrop-blur-md fixed w-full top-0 z-50 border-b border-gray-700 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Left: Title */}
-          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide">
+          <div className="flex items-center space-x-2">
+            <FaUsers className="text-blue-400 text-3xl" />
+          </div>
+          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide font-style: italic">
             Employee Dashboard
           </span>
 
@@ -145,7 +149,7 @@ const PostReferals = () => {
                   className="text-white hover:text-blue-400 px-3 py-2 rounded-full focus:outline-none"
                   title="User Menu"
                 >
-                  ⋮
+                  <FaUserCircle className="text-blue-400 text-3xl" />
                 </button>
 
                 {isDropdownOpen && (
@@ -171,7 +175,7 @@ const PostReferals = () => {
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
                       <div className="flex items-center space-x-2">
-                        <FaUserCircle className="text-blue-400 text-3xl" />
+                        
                       </div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">

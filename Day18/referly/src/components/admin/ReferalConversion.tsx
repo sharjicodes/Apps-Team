@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation } from "react-router-dom";
+
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 interface Referral {
   id: string;
@@ -21,7 +22,7 @@ const statusOptions = ["Pending", "Interviewing", "Offer", "Hired", "Rejected"];
 
 export default function ReferralConversion() {
   const { user, logout } = useAuth();
-  const locationPath = useLocation();
+
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [editId, setEditId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Referral>>({});
@@ -33,7 +34,10 @@ export default function ReferralConversion() {
   ];
 
   useEffect(() => {
-    const allReferralsObj = JSON.parse(localStorage.getItem("refers") || "{}");
+    const allReferralsObj = JSON.parse(
+      localStorage.getItem("refers") || "{}"
+    ) as Record<string, Referral[]>;
+
     const allReferrals: Referral[] = Object.values(allReferralsObj).flat();
 
     const processedReferrals = allReferrals.map((r) => ({
@@ -107,9 +111,9 @@ export default function ReferralConversion() {
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
           {/* Left - Title */}
           <div className="flex items-center space-x-2">
-            <FaUserCircle className="text-blue-400 text-3xl" />
+            <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
-          <span className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
+          <span className="text-xl sm:text-xl font-semibold  text-gray-900 dark:text-white font-style: italic">
             Admin Dashboard
           </span>
 
@@ -138,16 +142,15 @@ export default function ReferralConversion() {
                 className="text-gray-700 dark:text-white hover:text-blue-500 px-3 py-2 rounded-full focus:outline-none"
                 title="User Menu"
               >
-                ⋮
+                <div className="flex items-center space-x-2">
+                  <FaUserCircle className="text-blue-400 text-3xl" />
+                </div>
               </button>
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
                   {/* User Info */}
                   <div className="px-4 py-2 border-b border-gray-700">
-                    <div className="flex items-center space-x-2">
-                      <FaUserCircle className="text-blue-400 text-3xl" />
-                    </div>
                     <p className="font-semibold">{user?.name}</p>
                     <p className="text-sm text-gray-400">
                       {user?.role || "Employee"}

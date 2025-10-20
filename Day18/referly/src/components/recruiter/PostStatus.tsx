@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
+import { FaUserTie } from "react-icons/fa";
 
 interface Refer {
   id: string;
@@ -26,7 +27,7 @@ const PostStatus = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const allRefers = JSON.parse(localStorage.getItem("refers") || "{}");
+    const allRefers = JSON.parse(localStorage.getItem("refers") || "{}" ) as Record<string, Refer[]>;
     const refersArray: Refer[] = Object.values(allRefers).flat();
 
     const filtered = refersArray.filter((ref) => ref.recruiterId === user?.id);
@@ -67,6 +68,7 @@ const PostStatus = () => {
       autoClose: 2000,
       theme: "colored",
     });
+    return;
   };
 
   const navItems = [
@@ -82,9 +84,9 @@ const PostStatus = () => {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Title */}
           <div className="flex items-center space-x-2">
-            <FaUserCircle className="text-blue-400 text-3xl" />
+            <FaUserTie className="text-blue-400 text-3xl" />
           </div>
-          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide">
+          <span className="text-xl md:text-2xl font-semibold text-white tracking-wide font-style: italic">
             Recruiter Dashboard
           </span>
 
@@ -112,7 +114,7 @@ const PostStatus = () => {
                   onClick={() => setDropdownOpen(!isDropdownOpen)}
                   className="text-white hover:text-blue-400 px-3 py-2 rounded-full focus:outline-none"
                 >
-                  ⋮
+                  <FaUserCircle className="text-blue-400 text-3xl" />
                 </button>
 
                 {isDropdownOpen && (
@@ -138,7 +140,7 @@ const PostStatus = () => {
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
                       <div className="flex items-center space-x-2">
-                        <FaUserCircle className="text-blue-400 text-3xl" />
+                        
                       </div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">

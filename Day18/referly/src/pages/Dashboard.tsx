@@ -35,9 +35,9 @@ export default function Dashboard() {
   if (showSplash) {
     return (
       <div className="min-h-screen bg-cyan-500 text-white flex items-center justify-center transition-opacity duration-500">
-        <h1 className="text-6xl font-bold animate-pulse text-center">
+        <h1 className="text-6xl font-bold animate-pulse font-style: italic text-center">
           Hi, Welcome
-          <br /> {user.role} 👋
+          <br /> {user.name} 👋
         </h1>
       </div>
     );
