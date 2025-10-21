@@ -19,10 +19,13 @@ const jobSchema = z.object({
     message: "Type required",
   }),
   location: z.string().min(1, { message: "Location is required" }),
-  salary: z.number().min(0, { message: "Salary cannot be negative." }).int({ message: "Salary must be an integer." }),
+  salary: z
+    .number()
+    .min(0, { message: "Salary cannot be negative." })
+    .int({ message: "Salary must be an integer." }),
 });
 
- type JobData = z.infer<typeof jobSchema>;
+type JobData = z.infer<typeof jobSchema>;
 
 const Jobs = () => {
   const { logout, user } = useAuth();
@@ -34,9 +37,14 @@ const Jobs = () => {
   >([]);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit, control, formState: { errors } } = useForm<JobData>({
-  resolver: zodResolver(jobSchema),
-});
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<JobData>({
+    resolver: zodResolver(jobSchema),
+  });
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
@@ -168,9 +176,7 @@ const Jobs = () => {
 
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
-                      <div className="flex items-center space-x-2">
-                        
-                      </div>
+                      <div className="flex items-center space-x-2"></div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
                         {user?.role || "Recruiter"}

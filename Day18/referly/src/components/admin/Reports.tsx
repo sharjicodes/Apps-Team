@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdAdminPanelSettings } from "react-icons/md";
 
+//Typescript user interface
 interface User {
   id: string;
   name: string;
@@ -14,10 +15,11 @@ interface User {
   role: "Employee" | "Recruiter" | "Admin";
 }
 
+//function for user management
 const Reports = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  
+
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState({
     name: "",
@@ -46,11 +48,13 @@ const Reports = () => {
       toast.error("Please fill all fields");
       return;
     }
+    //for preventing duplicate users
     const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
     if (storedUsers.some((u: User) => u.email === newUser.email)) {
       toast.error("User with this email already exists!");
       return;
     }
+    //creating new user recruite
     const userData = {
       id: crypto.randomUUID(),
       name: newUser.name,
@@ -71,13 +75,13 @@ const Reports = () => {
     const updated = users.filter((u) => u.id !== id);
     localStorage.setItem("users", JSON.stringify(updated));
     setUsers(updated);
-    toast.success("User deleted sucessfully!")
+    toast.success("User deleted sucessfully!");
     return;
   };
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-900 text-white w-full">
-       <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
@@ -115,15 +119,14 @@ const Reports = () => {
                 title="User Menu"
               >
                 <div className="flex items-center space-x-2">
-                    <FaUserCircle className="text-blue-400 text-3xl" />
-                  </div>
+                  <FaUserCircle className="text-blue-400 text-3xl" />
+                </div>
               </button>
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
                   {/* User Info */}
                   <div className="px-4 py-2 border-b border-gray-700">
-                    
                     <p className="font-semibold">{user?.name}</p>
                     <p className="text-sm text-gray-400">
                       {user?.role || "Employee"}

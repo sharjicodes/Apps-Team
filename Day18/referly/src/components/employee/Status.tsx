@@ -95,9 +95,7 @@ const Status = () => {
 
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
-                      <div className="flex items-center space-x-2">
-                        
-                      </div>
+                      <div className="flex items-center space-x-2"></div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
                         {user?.role || "Employee"}

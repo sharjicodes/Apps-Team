@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdAdminPanelSettings } from "react-icons/md";
 
+//Typescript job interface
 interface Job {
   id: string;
   title: string;
@@ -21,6 +22,7 @@ interface Job {
   recruiterId: string;
 }
 
+//function for job management
 const Roles = () => {
   const { user, logout } = useAuth();
 
@@ -34,6 +36,7 @@ const Roles = () => {
     location: "",
     salary: "",
   });
+  //geoapify location result save
   const [locationOptions, setLocationOptions] = useState<
     { label: string; value: string }[]
   >([]);
@@ -45,7 +48,7 @@ const Roles = () => {
     { path: "/referalconversion", label: "📊 Referral Management" },
   ];
 
-  const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY; // replace with your Geoapify API key
+  const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY; 
 
   useEffect(() => {
     const allJobsObj = JSON.parse(
@@ -117,13 +120,13 @@ const Roles = () => {
     } else {
       // Create new job
       const newJobData: Job = {
-  ...newJob,
-  id: Date.now().toString(),
-  postedAt: new Date().toISOString(),
-  recruiterName: user?.name || "Admin",
-  recruiterId: user?.id || "admin", 
-  salary: Number(newJob.salary), 
-};
+        ...newJob,
+        id: Date.now().toString(),
+        postedAt: new Date().toISOString(),
+        recruiterName: user?.name || "Admin",
+        recruiterId: user?.id || "admin",
+        salary: Number(newJob.salary),
+      };
 
       const updatedJobs = [...jobs, newJobData];
       setJobs(updatedJobs);
@@ -140,7 +143,7 @@ const Roles = () => {
   };
 
   const handleEdit = (job: Job) => setEditingJob(job);
- 
+
   const handleDelete = (id: string) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
     const updated = jobs.filter((j) => j.id !== id);

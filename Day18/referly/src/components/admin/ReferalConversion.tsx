@@ -5,21 +5,23 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdAdminPanelSettings } from "react-icons/md";
 
+// Typescript interface for referals
 interface Referral {
   id: string;
-  name: string; // Candidate name
-  referredBy: string; // Employee who referred
+  name: string; 
+  referredBy: string; 
   place: string;
   aboutyou: string;
   resume: string;
-  status?: string; // Optional
-  recruiterId?: string; // Optional
-  recruiterName?: string; // Optional
+  status?: string; 
+  recruiterId?: string; 
+  recruiterName?: string; 
   postedAt: string;
 }
 
 const statusOptions = ["Pending", "Interviewing", "Offer", "Hired", "Rejected"];
 
+//function for referral management
 export default function ReferralConversion() {
   const { user, logout } = useAuth();
 
@@ -30,7 +32,7 @@ export default function ReferralConversion() {
   const navItems = [
     { path: "/reports", label: "🧮 Users Management" },
     { path: "/roles", label: "⚙️ Jobs Management" },
-    { path: "/referalconversion", label: "📊 Referral Management" },
+    { path: "/referalconversion", label: "📊 Referal Management" },
   ];
 
   useEffect(() => {

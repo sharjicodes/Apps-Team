@@ -7,7 +7,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 
-
+//Typescript Job interface
 interface Job {
   id: string;
   title: string;
@@ -20,6 +20,7 @@ interface Job {
   recruiterId?: string;
 }
 
+//function for joblisting
 const JobListings = () => {
   const { logout, user } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -90,8 +91,8 @@ const JobListings = () => {
                   title="User Menu"
                 >
                   <div className="flex items-center space-x-2">
-                        <FaUserCircle className="text-blue-400 text-3xl" />
-                      </div>
+                    <FaUserCircle className="text-blue-400 text-3xl" />
+                  </div>
                 </button>
 
                 {isDropdownOpen && (
@@ -117,9 +118,7 @@ const JobListings = () => {
                     {/* User info */}
 
                     <div className="px-4 py-2 border-b border-gray-700">
-                      <div className="flex items-center space-x-2">
-                        
-                      </div>
+                      <div className="flex items-center space-x-2"></div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
                         {user?.role || "Employee"}

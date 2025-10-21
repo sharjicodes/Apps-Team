@@ -11,6 +11,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 
+//zod validation schema for candidate referal form
 const referSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   place: z.string().min(1, { message: "Location is required" }),
@@ -18,6 +19,7 @@ const referSchema = z.object({
   resume: z.string().url(),
 });
 
+//typescript type for form data
 type referData = z.infer<typeof referSchema>;
 
 const PostReferals = () => {
@@ -52,32 +54,10 @@ const PostReferals = () => {
     control,
     formState: { errors },
   } = useForm<referData>({
-    resolver: zodResolver(referSchema),
+    resolver: zodResolver(referSchema),//connect validation with zod schema
   });
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
-
-  // const fetchLocations = async (inputValue: string) => {
-  //   if (!inputValue) return;
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(
-  //       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
-  //         inputValue
-  //       )}&limit=10&apiKey=${API_KEY}`
-  //     );
-  //     const data = await res.json();
-  //     const options = data.features.map((item: any) => ({
-  //       label: item.properties.formatted,
-  //       value: item.properties.formatted,
-  //     }));
-  //     setLocationOptions(options);
-  //   } catch (err) {
-  //     console.error("Error fetching locations:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const onSubmit = (data: referData) => {
     if (!user || !user.id) {
@@ -89,6 +69,7 @@ const PostReferals = () => {
     const allRefers = JSON.parse(localStorage.getItem("refers") || "{}");
     const userRefers = allRefers[user.id] || [];
 
+    //object forr new referal
     const newRefer = {
       id: crypto.randomUUID(),
       ...data,
@@ -174,9 +155,7 @@ const PostReferals = () => {
 
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
-                      <div className="flex items-center space-x-2">
-                        
-                      </div>
+                      <div className="flex items-center space-x-2"></div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
                         {user?.role || "Employee"}
@@ -287,7 +266,7 @@ const PostReferals = () => {
           )}
         </div>
 
-        {/* Place */}
+        
         {/* Place */}
         <div className="mb-4">
           <label className="block mb-1">Place</label>

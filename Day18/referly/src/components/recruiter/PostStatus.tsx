@@ -27,7 +27,9 @@ const PostStatus = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const allRefers = JSON.parse(localStorage.getItem("refers") || "{}" ) as Record<string, Refer[]>;
+    const allRefers = JSON.parse(
+      localStorage.getItem("refers") || "{}"
+    ) as Record<string, Refer[]>;
     const refersArray: Refer[] = Object.values(allRefers).flat();
 
     const filtered = refersArray.filter((ref) => ref.recruiterId === user?.id);
@@ -139,9 +141,7 @@ const PostStatus = () => {
 
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
-                      <div className="flex items-center space-x-2">
-                        
-                      </div>
+                      <div className="flex items-center space-x-2"></div>
                       <p className="font-semibold">{user?.name}</p>
                       <p className="text-sm text-gray-400">
                         {user?.role || "Recruiter"}

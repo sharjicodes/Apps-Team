@@ -60,7 +60,7 @@ function AppRoutes() {
           element={currentUser ? <Dashboard /> : <Navigate to="/login" />}
         />
 
-         <Route
+        <Route
           path="/reports"
           element={currentUser ? <Reports /> : <Navigate to="/login" />}
         />
@@ -72,10 +72,11 @@ function AppRoutes() {
 
         <Route
           path="/referalconversion"
-          element={currentUser ? <ReferalConversion /> : <Navigate to="/login" />}
+          element={
+            currentUser ? <ReferalConversion /> : <Navigate to="/login" />
+          }
         />
       </Routes>
-      
     </div>
   );
 }
