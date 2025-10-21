@@ -1,6 +1,6 @@
-# React + TypeScript + Vite
+#  REFERALLYY WEB APP
 
-REFERALLYY WEB APP
+React + TypeScript + Vite
 
 An referlyy app build using React + TypeScript + Vite 
 
