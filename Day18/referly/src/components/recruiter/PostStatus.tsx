@@ -92,7 +92,7 @@ const PostStatus = () => {
             Recruiter Dashboard
           </span>
 
-          {/* Desktop nav links */}
+          {/* Desktop navbr links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {navItems.map((item) => (
               <li key={item.path}>
@@ -109,7 +109,7 @@ const PostStatus = () => {
               </li>
             ))}
 
-            {/* 3-dot dropdown */}
+            {/* dropdown */}
             <li>
               <div className="relative">
                 <button
@@ -121,7 +121,7 @@ const PostStatus = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                    {/* Mobile nav inside dropdown (hidden on desktop) */}
+                    
                     <div className="flex flex-col md:hidden p-2 border-b border-gray-700">
                       {navItems.map((item) => (
                         <a
@@ -165,7 +165,7 @@ const PostStatus = () => {
             </li>
           </ul>
 
-          {/* Mobile view — only ⋮ button */}
+          {/* Mobile view  */}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}

@@ -108,10 +108,10 @@ export default function ReferralConversion() {
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gray-900 text-white w-full">
-      {/* ✅ Navbar */}
+      {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          {/* Left - Title */}
+          {/*  Title */}
           <div className="flex items-center space-x-2">
             <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
@@ -119,7 +119,7 @@ export default function ReferralConversion() {
             Admin Dashboard
           </span>
 
-          {/* Right - Desktop Links */}
+          {/*  Links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {/* Nav Links */}
             {navItems.map((item) => (
@@ -137,7 +137,7 @@ export default function ReferralConversion() {
               </li>
             ))}
 
-            {/* 3-dot user menu */}
+            {/* user menu */}
             <li className="relative">
               <button
                 onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -175,7 +175,7 @@ export default function ReferralConversion() {
             </li>
           </ul>
 
-          {/* Right - Mobile 3-dot menu */}
+          
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -187,7 +187,7 @@ export default function ReferralConversion() {
 
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-60 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                {/* Nav links */}
+                {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
                     <a
@@ -234,12 +234,12 @@ export default function ReferralConversion() {
           </div>
         </div>
       </nav>
-      {/* ✅ Page Title */}
+      {/* Title */}
       <h1 className="text-2xl sm:text-3xl font-bold mt-20 mb-6 text-center">
         📊 Referral Management
       </h1>
 
-      {/* ✅ Referral List */}
+      {/* Referral */}
       <div className="w-full max-w-5xl px-4 sm:px-6 md:px-8">
         {referrals.length === 0 ? (
           <p className="text-center text-xl mt-10">No referrals found.</p>

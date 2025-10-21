@@ -85,7 +85,7 @@ const Reports = () => {
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          {/* Left - Title */}
+          {/* Title */}
           <div className="flex items-center space-x-2">
             <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
@@ -95,7 +95,7 @@ const Reports = () => {
 
           {/* Right - Desktop Links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
-            {/* Nav Links */}
+            {/* Links */}
             {navItems.map((item) => (
               <li key={item.path}>
                 <a
@@ -111,7 +111,7 @@ const Reports = () => {
               </li>
             ))}
 
-            {/* 3-dot user menu */}
+            {/* user menu */}
             <li className="relative">
               <button
                 onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -125,7 +125,7 @@ const Reports = () => {
 
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                  {/* User Info */}
+                  {/* User */}
                   <div className="px-4 py-2 border-b border-gray-700">
                     <p className="font-semibold">{user?.name}</p>
                     <p className="text-sm text-gray-400">
@@ -133,7 +133,7 @@ const Reports = () => {
                     </p>
                   </div>
 
-                  {/* Logout Button */}
+                  {/* Logout */}
                   <button
                     onClick={() => {
                       setDropdownOpen(false);
@@ -149,7 +149,7 @@ const Reports = () => {
             </li>
           </ul>
 
-          {/* Right - Mobile 3-dot menu */}
+          {/* Mobile  */}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -161,7 +161,7 @@ const Reports = () => {
 
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-60 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                {/* Nav links */}
+                {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
                     <a

@@ -69,10 +69,11 @@ const Roles = () => {
     setJobs(updatedJobs);
   };
 
+  //location fetching
   const handleLocationInput = (inputValue: string) => {
     if (!inputValue) return;
 
-    // fetch locations asynchronously
+    
     fetch(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
         inputValue
@@ -94,7 +95,7 @@ const Roles = () => {
 
     const jobData = editingJob || newJob;
 
-    // ✅ validate based on whichever is active
+    
     if (
       !jobData.title ||
       !jobData.department ||
@@ -106,9 +107,9 @@ const Roles = () => {
       toast.error("Please fill all fields");
       return;
     }
-
+//update job and editing job
     if (editingJob) {
-      // Update job
+      
       const updatedJobs = jobs.map((job) =>
         job.id === editingJob.id ? editingJob : job
       );
@@ -118,7 +119,7 @@ const Roles = () => {
       toast.success("Job edited succesfully");
       return;
     } else {
-      // Create new job
+      
       const newJobData: Job = {
         ...newJob,
         id: Date.now().toString(),
@@ -157,7 +158,7 @@ const Roles = () => {
       {/* Navbar */}
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          {/* Left - Title */}
+          {/* Title */}
           <div className="flex items-center space-x-2">
             <MdAdminPanelSettings className="text-blue-400 text-3xl" />
           </div>
@@ -165,9 +166,9 @@ const Roles = () => {
             Admin Dashboard
           </span>
 
-          {/* Right - Desktop Links */}
+          {/* Desktop Links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
-            {/* Nav Links */}
+            {/* Links */}
             {navItems.map((item) => (
               <li key={item.path}>
                 <a
@@ -183,7 +184,7 @@ const Roles = () => {
               </li>
             ))}
 
-            {/* 3-dot user menu */}
+            {/*  user menu */}
             <li className="relative">
               <button
                 onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -221,7 +222,7 @@ const Roles = () => {
             </li>
           </ul>
 
-          {/* Right - Mobile 3-dot menu */}
+          {/* Mobile menu */}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -233,7 +234,7 @@ const Roles = () => {
 
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-60 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                {/* Nav links */}
+                {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
                     <a
@@ -283,7 +284,7 @@ const Roles = () => {
 
       <h1 className="text-3xl font-bold mt-20 mb-6">⚙️ Manage Jobs</h1>
 
-      {/* Add/Edit Job Form */}
+      {/* Job Form */}
       <form
         onSubmit={handleAddJob}
         className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-lg mb-10"
@@ -324,7 +325,7 @@ const Roles = () => {
           }
         />
 
-        {/* ✅ Job Type Selector */}
+        {/* Job Type */}
         <select
           className="w-full mb-3 p-2 rounded bg-gray-700 text-white focus:outline-none"
           value={editingJob?.type || newJob.type}
@@ -342,7 +343,7 @@ const Roles = () => {
           <option value="Internship">Internship</option>
         </select>
 
-        {/* Location with search */}
+        {/* Location  */}
         <Select
           placeholder={"Search location..."}
           isSearchable

@@ -54,7 +54,7 @@ const PostReferals = () => {
     control,
     formState: { errors },
   } = useForm<referData>({
-    resolver: zodResolver(referSchema),//connect validation with zod schema
+    resolver: zodResolver(referSchema),
   });
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
@@ -105,7 +105,7 @@ const PostReferals = () => {
             Employee Dashboard
           </span>
 
-          {/* Right: Desktop Nav Links */}
+          {/*  Nav Links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {navItems.map((item) => (
               <li key={item.path}>
@@ -135,7 +135,7 @@ const PostReferals = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                    {/* Mobile nav items (hidden on desktop) */}
+                    {/* Mobile */}
                     <div className="flex flex-col md:hidden p-2 border-b border-gray-700">
                       {navItems.map((item) => (
                         <a
@@ -179,7 +179,7 @@ const PostReferals = () => {
             </li>
           </ul>
 
-          {/* Mobile view (only 3-dot visible) */}
+          {/* Mobile view */}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}

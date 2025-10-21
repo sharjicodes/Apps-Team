@@ -37,7 +37,7 @@ const Status = () => {
       {/* Navbar */}
       <nav className="bg-gray-800/80 backdrop-blur-md fixed w-full top-0 z-50 border-b border-gray-700 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Left: Title */}
+          {/* Title */}
           <div className="flex items-center space-x-2">
             <FaUsers className="text-blue-400 text-3xl" />
           </div>
@@ -62,7 +62,7 @@ const Status = () => {
               </li>
             ))}
 
-            {/* 3-dot menu */}
+            {/* menu */}
             <li>
               <div className="relative">
                 <button
@@ -75,7 +75,7 @@ const Status = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                    {/* Mobile nav items (hidden on desktop) */}
+                  
                     <div className="flex flex-col md:hidden p-2 border-b border-gray-700">
                       {navItems.map((item) => (
                         <a
@@ -119,7 +119,7 @@ const Status = () => {
             </li>
           </ul>
 
-          {/* Mobile view (only 3-dot visible) */}
+          {/* Mobile view  */}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -177,7 +177,7 @@ const Status = () => {
         </div>
       </nav>
 
-      {/* Referrals Display */}
+      {/* Referrals*/}
       <div className="mt-24 w-full max-w-3xl px-2 md:px-0">
         {refers.length === 0 ? (
           <p className="text-center text-xl mt-10 text-gray-400">

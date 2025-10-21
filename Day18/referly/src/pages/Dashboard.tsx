@@ -29,7 +29,7 @@ export default function Dashboard() {
     return () => clearTimeout(timer);
   }, [user, navigate]);
 
-  if (!user) return null; // avoid render before login
+  if (!user) return null; 
 
   // Splash Screen
   if (showSplash) {

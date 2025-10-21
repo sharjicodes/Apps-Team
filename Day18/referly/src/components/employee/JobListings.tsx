@@ -54,7 +54,7 @@ const JobListings = () => {
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center w-full">
       <ToastContainer position="top-right" autoClose={2000} />
 
-      {/* ✅ Navbar */}
+      {/* Navbar */}
       <nav className="bg-gray-800/80 backdrop-blur-md fixed w-full top-0 z-50 border-b border-gray-700 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Left: Title */}
@@ -200,7 +200,7 @@ const JobListings = () => {
         </div>
       </nav>
 
-      {/* ✅ Job List */}
+      {/* Job List */}
       <div className="mt-24 w-full max-w-5xl px-4 pb-10">
         {jobs.length === 0 ? (
           <p className="text-center text-lg md:text-xl mt-10 text-gray-300">

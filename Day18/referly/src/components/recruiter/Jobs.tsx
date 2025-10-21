@@ -48,62 +48,50 @@ const Jobs = () => {
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
-  // Fetch cities dynamically from Geoapify
-  // const fetchLocations = async (inputValue: string) => {
-  //   if (!inputValue) return;
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(
-  //       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
-  //         inputValue
-  //       )}&limit=10&apiKey=${API_KEY}`
-  //     );
-  //     const data = await res.json();
-  //     const options = (data.features || []).map((item: any) => ({
-  //       label: item.properties.formatted,
-  //       value: item.properties.formatted,
-  //     }));
-  //     setLocationOptions(options);
-  //   } catch (err) {
-  //     console.error("Error fetching locations:", err);
-  //     setLocationOptions([]); // fallback empty
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
 
   // Save job post to localStorage
-  const onSubmit = (data: JobData) => {
-    if (!user || !user.id) {
-      toast.error("⚠️ User not found. Please log in again.");
-      navigate("/login");
-      return;
-    }
-
-    const allJobs = JSON.parse(localStorage.getItem("jobs") || "{}");
-    const userJobs = allJobs[user.id] || [];
-
-    const newJob = {
-      id: crypto.randomUUID(),
-      recruiterId: user.id,
-      recruiterName: user.name || "Unknown Recruiter",
-      recruiterEmail: user.email || "N/A",
-      ...data,
-      postedAt: new Date().toISOString(),
-    };
-
-    allJobs[user.id] = [...userJobs, newJob];
-    localStorage.setItem("jobs", JSON.stringify(allJobs));
-
-    toast.success("✅ Job successfully posted!", {
-      position: "top-center",
-      autoClose: 2000,
-      theme: "colored",
-    });
+const onSubmit = (data: JobData) => {
+  if (!user || !user.id) {
+    toast.error("⚠️ User not found. Please log in again.");
+    navigate("/login");
     return;
+  }
 
-    setTimeout(() => navigate("/jobs"), 2500);
+  
+  const stored = localStorage.getItem("jobs");
+  let allJobs: Record<string, any[]> = {};
+
+  try {
+    const parsed = stored ? JSON.parse(stored) : {};
+    allJobs = Array.isArray(parsed) ? {} : parsed; 
+  } catch {
+    allJobs = {};
+  }
+
+  const userJobs = allJobs[user.id] || [];
+
+  const newJob = {
+    id: crypto.randomUUID(),
+    recruiterId: user.id,
+    recruiterName: user.name || "Unknown Recruiter",
+    recruiterEmail: user.email || "N/A",
+    ...data,
+    postedAt: new Date().toISOString(),
   };
+
+  allJobs[user.id] = [...userJobs, newJob];
+  localStorage.setItem("jobs", JSON.stringify(allJobs));
+
+  toast.success("✅ Job successfully posted!", {
+    position: "top-center",
+    autoClose: 2000,
+    theme: "colored",
+  });
+
+  setTimeout(() => navigate("/jobs"), 2500);
+};
+
 
   // Navbar links
   const navItems = [
@@ -116,7 +104,7 @@ const Jobs = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white w-full">
       <ToastContainer />
 
-      {/* ✅ Unified Navbar */}
+      {/* Navbar */}
       <nav className="bg-gray-800/80 backdrop-blur-md fixed w-full top-0 z-50 border-b border-gray-700 shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Title */}
@@ -127,7 +115,7 @@ const Jobs = () => {
             Recruiter Dashboard
           </span>
 
-          {/* Desktop nav links */}
+          {/* Desktop navbar links */}
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {navItems.map((item) => (
               <li key={item.path}>
@@ -144,7 +132,7 @@ const Jobs = () => {
               </li>
             ))}
 
-            {/* 3-dot dropdown */}
+            {/* dropdown */}
             <li>
               <div className="relative">
                 <button
@@ -200,7 +188,7 @@ const Jobs = () => {
             </li>
           </ul>
 
-          {/* Mobile view — only ⋮ button */}
+          {/* Mobile view — only*/}
           <div className="md:hidden relative">
             <button
               onClick={() => setDropdownOpen(!isDropdownOpen)}
@@ -257,7 +245,7 @@ const Jobs = () => {
         </div>
       </nav>
 
-      {/* ✅ Job Posting Form */}
+      {/* Job Posting Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-gray-800 p-8 rounded-lg w-full max-w-sm shadow-lg mt-20"
@@ -326,8 +314,7 @@ const Jobs = () => {
           )}
         </div>
 
-        {/* Location */}
-        {/* Location (Geoapify Autocomplete) */}
+        
         {/* Place */}
         <div className="mb-4">
           <label className="block mb-1">Place</label>
