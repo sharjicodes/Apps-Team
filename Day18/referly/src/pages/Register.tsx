@@ -6,6 +6,9 @@ import { useAuth } from "../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaUserPlus } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
 
 //zod validation schema for register form
 const registerSchema = z.object({
@@ -20,6 +23,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 const Register = () => {
   const navigate = useNavigate();
   const { register: registerUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -53,6 +57,7 @@ const Register = () => {
         <div className="mb-4">
           <label className="block mb-1 font-medium">Name</label>
           <input
+            placeholder="Enter your Name"
             type="text"
             {...register("name")}
             className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -66,6 +71,7 @@ const Register = () => {
         <div className="mb-4">
           <label className="block mb-1 font-medium">Email</label>
           <input
+            placeholder="Enter your Email"
             type="email"
             {...register("email")}
             className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -76,20 +82,31 @@ const Register = () => {
         </div>
 
         {/* Password */}
-        <div className="mb-4">
+       <div className="mb-4 relative">
           <label className="block mb-1 font-medium">Password</label>
+
           <input
-            type="password"
+            placeholder="Enter your Password"
+            type={showPassword ? "text" : "password"} 
             {...register("password")}
-            className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 pr-10 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-300 hover:text-blue-400"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
               {errors.password.message}
             </p>
           )}
         </div>
-
+        
         {/* Role */}
         <div className="mb-4">
           <label className="block mb-1 font-medium">Role</label>

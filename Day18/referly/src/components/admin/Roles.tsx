@@ -413,6 +413,9 @@ const Roles = () => {
                 <strong>Department:</strong> {job.department}
               </p>
               <p>
+                <strong>Summary:</strong> {job.summary}
+              </p>
+              <p>
                 <strong>Type:</strong> {job.type}
               </p>
 

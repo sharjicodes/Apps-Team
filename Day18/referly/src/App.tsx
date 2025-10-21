@@ -22,7 +22,7 @@ function AppRoutes() {
   const currentUser = user || loggedInUser;
 
   return (
-    <div className="min-h-screen bg-cyan-500 text-white flex items-center justify-center">
+    
       <Routes>
         <Route
           path="/"
@@ -77,7 +77,7 @@ function AppRoutes() {
           }
         />
       </Routes>
-    </div>
+    
   );
 }
 
