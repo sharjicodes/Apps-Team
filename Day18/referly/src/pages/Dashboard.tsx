@@ -14,7 +14,7 @@ export default function Dashboard() {
     const timer = setTimeout(() => {
       setShowSplash(false);
 
-      // Navigate based on user role
+      
       if (user.role === "Recruiter") {
         navigate("/jobs");
       } else if (user.role === "Employee") {
