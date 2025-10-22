@@ -58,7 +58,7 @@ const TransactionForm = ({ onAdd }) => {
             <option>Other</option>
           </select>
         </div>
-      </div>
+    </div>
 
       <label htmlFor="date">Date:</label>
       <input
