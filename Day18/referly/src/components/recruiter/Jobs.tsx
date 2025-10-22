@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaUserTie } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const jobSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -23,6 +24,10 @@ const jobSchema = z.object({
     .number()
     .min(0, { message: "Salary cannot be negative." })
     .int({ message: "Salary must be an integer." }),
+  noOfOpenPos: z
+  .number()
+  .min(0, { message: "Positions cannot be negative." })
+  .int({ message: "Positions must be a whole number." }),
 });
 
 type JobData = z.infer<typeof jobSchema>;
@@ -42,56 +47,55 @@ const Jobs = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<JobData>({
     resolver: zodResolver(jobSchema),
   });
 
   const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
-  
-
   // Save job post to localStorage
-const onSubmit = (data: JobData) => {
-  if (!user || !user.id) {
-    toast.error("⚠️ User not found. Please log in again.");
-    navigate("/login");
-    return;
-  }
+  const onSubmit = (data: JobData) => {
+    if (!user || !user.id) {
+      toast.error("⚠️ User not found. Please log in again.");
+      navigate("/login");
+      return;
+    }
 
-  
-  const stored = localStorage.getItem("jobs");
-  let allJobs: Record<string, any[]> = {};
+    const stored = localStorage.getItem("jobs");
+    let allJobs: Record<string, any[]> = {};
 
-  try {
-    const parsed = stored ? JSON.parse(stored) : {};
-    allJobs = Array.isArray(parsed) ? {} : parsed; 
-  } catch {
-    allJobs = {};
-  }
+    try {
+      const parsed = stored ? JSON.parse(stored) : {};
+      allJobs = Array.isArray(parsed) ? {} : parsed;
+    } catch {
+      allJobs = {};
+    }
 
-  const userJobs = allJobs[user.id] || [];
+    const userJobs = allJobs[user.id] || [];
 
-  const newJob = {
-    id: crypto.randomUUID(),
-    recruiterId: user.id,
-    recruiterName: user.name || "Unknown Recruiter",
-    recruiterEmail: user.email || "N/A",
-    ...data,
-    postedAt: new Date().toISOString(),
+    const newJob = {
+      id: crypto.randomUUID(),
+      recruiterId: user.id,
+      recruiterName: user.name || "Unknown Recruiter",
+      recruiterEmail: user.email || "N/A",
+      ...data,
+      postedAt: new Date().toISOString(),
+    };
+
+    allJobs[user.id] = [...userJobs, newJob];
+    localStorage.setItem("jobs", JSON.stringify(allJobs));
+
+    reset();
+
+    toast.success("✅ Job successfully posted!", {
+      position: "top-center",
+      autoClose: 2000,
+      theme: "colored",
+    });
+
+    setTimeout(() => navigate("/jobs"), 2500);
   };
-
-  allJobs[user.id] = [...userJobs, newJob];
-  localStorage.setItem("jobs", JSON.stringify(allJobs));
-
-  toast.success("✅ Job successfully posted!", {
-    position: "top-center",
-    autoClose: 2000,
-    theme: "colored",
-  });
-
-  setTimeout(() => navigate("/jobs"), 2500);
-};
-
 
   // Navbar links
   const navItems = [
@@ -119,8 +123,8 @@ const onSubmit = (data: JobData) => {
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {navItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
+                <Link
+                  to={item.path}
                   className={`transition ${
                     location.pathname === item.path
                       ? "text-blue-400 font-semibold border-b-2 border-blue-400 pb-1"
@@ -128,7 +132,7 @@ const onSubmit = (data: JobData) => {
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -144,23 +148,8 @@ const onSubmit = (data: JobData) => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                    {/* Mobile nav inside dropdown (hidden on desktop) */}
-                    <div className="flex flex-col md:hidden p-2 border-b border-gray-700">
-                      {navItems.map((item) => (
-                        <a
-                          key={item.path}
-                          href={item.path}
-                          onClick={() => setDropdownOpen(false)}
-                          className={`block px-4 py-2 rounded-md transition ${
-                            location.pathname === item.path
-                              ? "bg-blue-700 text-white font-semibold"
-                              : "hover:bg-gray-700"
-                          }`}
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
+                    
+                    
 
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
@@ -202,9 +191,9 @@ const onSubmit = (data: JobData) => {
               <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
                 <div className="flex flex-col p-2 border-b border-gray-700">
                   {navItems.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
-                      href={item.path}
+                      to={item.path}
                       onClick={() => setDropdownOpen(false)}
                       className={`block px-4 py-2 rounded-md transition ${
                         location.pathname === item.path
@@ -213,7 +202,7 @@ const onSubmit = (data: JobData) => {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
 
@@ -314,7 +303,6 @@ const onSubmit = (data: JobData) => {
           )}
         </div>
 
-        
         {/* Place */}
         <div className="mb-4">
           <label className="block mb-1">Place</label>
@@ -361,6 +349,7 @@ const onSubmit = (data: JobData) => {
             <p className="text-red-500 text-sm">{errors.location.message}</p>
           )}
         </div>
+
         {/* Salary */}
         <div className="mb-4">
           <label className="block mb-1">Salary (CTC)</label>
@@ -373,6 +362,21 @@ const onSubmit = (data: JobData) => {
           />
           {errors.salary && (
             <p className="text-red-500 text-sm">{errors.salary.message}</p>
+          )}
+        </div>
+
+        {/* Salary */}
+        <div className="mb-4">
+          <label className="block mb-1">No Of Open Positions</label>
+          <input
+            type="number"
+            step="0.01"
+            placeholder="Enter the count"
+            {...register("noOfOpenPos", { valueAsNumber: true })}
+            className="w-full p-2 rounded bg-gray-700 focus:outline-none"
+          />
+          {errors.noOfOpenPos && (
+            <p className="text-red-500 text-sm">{errors.noOfOpenPos.message}</p>
           )}
         </div>
 

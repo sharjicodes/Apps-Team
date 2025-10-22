@@ -6,6 +6,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdAdminPanelSettings } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 //Typescript user interface
 interface User {
@@ -98,16 +99,16 @@ const Reports = () => {
             {/* Links */}
             {navItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
+                <Link
+                  to={item.path}
                   className={`transition ${
                     location.pathname === item.path
-                      ? "text-blue-500 font-semibold border-b-2 border-blue-500 pb-1"
-                      : "text-gray-700 dark:text-white hover:text-blue-500"
+                      ? "text-blue-400 font-semibold border-b-2 border-blue-400 pb-1"
+                      : "text-white hover:text-blue-400"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -164,9 +165,9 @@ const Reports = () => {
                 {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
-                      href={item.path}
+                      to={item.path}
                       onClick={() => setDropdownOpen(false)}
                       className={`block px-4 py-2 rounded-md transition ${
                         location.pathname === item.path
@@ -175,7 +176,7 @@ const Reports = () => {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
 

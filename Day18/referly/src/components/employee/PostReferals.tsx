@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 //zod validation schema for candidate referal form
 const referSchema = z.object({
@@ -109,8 +110,8 @@ const PostReferals = () => {
           <ul className="hidden md:flex items-center space-x-6 text-sm md:text-base">
             {navItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
+                <Link
+                  to={item.path}
                   className={`transition ${
                     location.pathname === item.path
                       ? "text-blue-400 font-semibold border-b-2 border-blue-400 pb-1"
@@ -118,7 +119,7 @@ const PostReferals = () => {
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -135,24 +136,7 @@ const PostReferals = () => {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-gray-800 text-white rounded-lg shadow-lg border border-gray-700 z-50">
-                    {/* Mobile */}
-                    <div className="flex flex-col md:hidden p-2 border-b border-gray-700">
-                      {navItems.map((item) => (
-                        <a
-                          key={item.path}
-                          href={item.path}
-                          onClick={() => setDropdownOpen(false)}
-                          className={`block px-4 py-2 rounded-md transition ${
-                            location.pathname === item.path
-                              ? "bg-blue-700 text-white font-semibold"
-                              : "hover:bg-gray-700"
-                          }`}
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
-
+                    
                     {/* User info */}
                     <div className="px-4 py-2 border-b border-gray-700">
                       <div className="flex items-center space-x-2"></div>
@@ -194,9 +178,9 @@ const PostReferals = () => {
                 {/* All nav links */}
                 <div className="flex flex-col p-2 border-b border-gray-700">
                   {navItems.map((item) => (
-                    <a
+                   <Link
                       key={item.path}
-                      href={item.path}
+                      to={item.path}
                       onClick={() => setDropdownOpen(false)}
                       className={`block px-4 py-2 rounded-md transition ${
                         location.pathname === item.path
@@ -205,7 +189,7 @@ const PostReferals = () => {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
 

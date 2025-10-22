@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-
+import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdAdminPanelSettings } from "react-icons/md";
@@ -124,16 +124,16 @@ export default function ReferralConversion() {
             {/* Nav Links */}
             {navItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
+                <Link
+                  to={item.path}
                   className={`transition ${
                     location.pathname === item.path
-                      ? "text-blue-500 font-semibold border-b-2 border-blue-500 pb-1"
-                      : "text-gray-700 dark:text-white hover:text-blue-500"
+                      ? "text-blue-400 font-semibold border-b-2 border-blue-400 pb-1"
+                      : "text-white hover:text-blue-400"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -190,9 +190,9 @@ export default function ReferralConversion() {
                 {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
-                      href={item.path}
+                      to={item.path}
                       onClick={() => setDropdownOpen(false)}
                       className={`block px-4 py-2 rounded-md transition ${
                         location.pathname === item.path
@@ -201,7 +201,7 @@ export default function ReferralConversion() {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
 

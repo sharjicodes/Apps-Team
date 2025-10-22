@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-
+import { Link } from "react-router-dom";
 import Select from "react-select";
 import { FaUserCircle } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
@@ -17,6 +17,7 @@ interface Job {
   type: string;
   location: string;
   salary: number;
+  noOfOpenPos: number;
   postedAt: string;
   recruiterName: string;
   recruiterId: string;
@@ -35,7 +36,9 @@ const Roles = () => {
     type: "",
     location: "",
     salary: "",
+    noOfOpenPos: "",
   });
+  
   //geoapify location result save
   const [locationOptions, setLocationOptions] = useState<
     { label: string; value: string }[]
@@ -48,7 +51,7 @@ const Roles = () => {
     { path: "/referalconversion", label: "📊 Referral Management" },
   ];
 
-  const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY; 
+  const API_KEY = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
   useEffect(() => {
     const allJobsObj = JSON.parse(
@@ -73,7 +76,6 @@ const Roles = () => {
   const handleLocationInput = (inputValue: string) => {
     if (!inputValue) return;
 
-    
     fetch(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
         inputValue
@@ -95,21 +97,20 @@ const Roles = () => {
 
     const jobData = editingJob || newJob;
 
-    
     if (
       !jobData.title ||
       !jobData.department ||
       !jobData.location ||
       !jobData.salary ||
       !jobData.summary ||
-      !jobData.type
+      !jobData.type ||
+      !jobData.noOfOpenPos
     ) {
       toast.error("Please fill all fields");
       return;
     }
-//update job and editing job
+    //update job and editing job
     if (editingJob) {
-      
       const updatedJobs = jobs.map((job) =>
         job.id === editingJob.id ? editingJob : job
       );
@@ -119,7 +120,6 @@ const Roles = () => {
       toast.success("Job edited succesfully");
       return;
     } else {
-      
       const newJobData: Job = {
         ...newJob,
         id: Date.now().toString(),
@@ -127,6 +127,7 @@ const Roles = () => {
         recruiterName: user?.name || "Admin",
         recruiterId: user?.id || "admin",
         salary: Number(newJob.salary),
+        noOfOpenPos: Number(newJob.noOfOpenPos),
       };
 
       const updatedJobs = [...jobs, newJobData];
@@ -139,6 +140,7 @@ const Roles = () => {
         salary: "",
         summary: "",
         type: "Full Time",
+        noOfOpenPos: "",
       });
     }
   };
@@ -171,16 +173,16 @@ const Roles = () => {
             {/* Links */}
             {navItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
+               <Link
+                  to={item.path}
                   className={`transition ${
                     location.pathname === item.path
-                      ? "text-blue-500 font-semibold border-b-2 border-blue-500 pb-1"
-                      : "text-gray-700 dark:text-white hover:text-blue-500"
+                      ? "text-blue-400 font-semibold border-b-2 border-blue-400 pb-1"
+                      : "text-white hover:text-blue-400"
                   }`}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
 
@@ -237,9 +239,9 @@ const Roles = () => {
                 {/* links */}
                 <div className="flex flex-col p-2">
                   {navItems.map((item) => (
-                    <a
+                    <Link
                       key={item.path}
-                      href={item.path}
+                      to={item.path}
                       onClick={() => setDropdownOpen(false)}
                       className={`block px-4 py-2 rounded-md transition ${
                         location.pathname === item.path
@@ -248,7 +250,7 @@ const Roles = () => {
                       }`}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   ))}
                 </div>
 
@@ -339,7 +341,7 @@ const Roles = () => {
             Select Type
           </option>
           <option value="Full Time">Full Time</option>
-          <option value="Trainee">Part Time</option>
+          <option value="Trainee">Trainee</option>
           <option value="Internship">Internship</option>
         </select>
 
@@ -369,6 +371,8 @@ const Roles = () => {
           className="mb-3 text-black"
         />
 
+        {/* salary */}
+
         <input
           type="number"
           placeholder="Salary"
@@ -382,6 +386,26 @@ const Roles = () => {
               : setNewJob({ ...newJob, salary: e.target.value })
           }
         />
+
+        {/* noOfOpenPos */}
+
+        <input
+          type="number"
+          placeholder="No Of Open Position"
+          min="0"
+          required
+          className="w-full mb-3 p-2 rounded bg-gray-700 focus:outline-none"
+          value={editingJob?.noOfOpenPos || newJob.noOfOpenPos}
+          onChange={(e) =>
+            editingJob
+              ? setEditingJob({
+                  ...editingJob,
+                  noOfOpenPos: Number(e.target.value),
+                })
+              : setNewJob({ ...newJob, noOfOpenPos: e.target.value })
+          }
+        />
+
         <button
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 w-full py-2 rounded font-semibold"
@@ -424,6 +448,9 @@ const Roles = () => {
               </p>
               <p>
                 <strong>Salary:</strong> ₹{job.salary}
+              </p>
+              <p>
+                <strong>No Of Open Position:</strong> {job.noOfOpenPos}
               </p>
               <p className="text-sm text-gray-400">
                 Posted at: {new Date(job.postedAt).toLocaleString()}
